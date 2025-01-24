@@ -1,0 +1,6 @@
+flask_sqlalchemy
+flask_login
+datetime
+Flask
+Flask-Mail
+
