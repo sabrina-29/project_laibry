@@ -1,12 +1,16 @@
-from datetime import datetime, date
+from datetime import date
 from app import app, db
 from models import Admin, Book, Customer, Loan, Notification
 from werkzeug.security import generate_password_hash
+from models import Notification
+
+
 
 # Ensure the seeding process is inside the application context
 with app.app_context():
     # Create tables
     db.create_all()
+    
 
     # Add books
     book1 = Book(name='The Great Gatsby', author='F. Scott Fitzgerald', year_published=1925, book_type=1, category='Fiction', available_copies=5)
@@ -37,42 +41,62 @@ with app.app_context():
     loan5 = Loan(book_id=5, cust_id=5, loan_date=date(2021, 3, 5), return_date=date(2021, 3, 19))
     db.session.add_all([loan1, loan2, loan3, loan4, loan5])
 
-    # Add admin
-    admin1 = Admin(username='admin', password=generate_password_hash('123', method='pbkdf2:sha256'))
-    db.session.add(admin1)
-
-    #add notifications
-    notification1 = Notification(message='Book The Great Gatsby is due for return on 2021-03-15', cust_id=1)
-    notification2 = Notification(message='Book To Kill a Mockingbird is due for return on 2021-03-16', cust_id=2)
-    notification3 = Notification(message='Book 1984 is due for return on 2021-03-17', cust_id=3)
-    notification4 = Notification(message='Book The Catcher in the Rye is due for return on 2021-03-18', cust_id=4)
-    notification5 = Notification(message='Book The Hobbit is due for return on 2021-03-19', cust_id=5)
-    db.session.add_all([notification1, notification2, notification3, notification4, notification5])
-    def update_notification_status(notification_id):
-        with app.app_context():
-            # Get the notification by ID
-            notification = Notification.query.get(notification_id)
-            
-            if notification:
-                # Update its status to 'read'
-                notification.status = 'read'
-                
-                # Commit the update to the database
-                db.session.commit()
-                
-                print('Notification status updated successfully.')
-            else:
-                print('Notification not found.')
-
-# Example: Update notification with ID 1
-update_notification_status(1)
-
-    # Commit all changes
+#add admin
+admin1 = Admin(username='admin', password=generate_password_hash('123', method='pbkdf2:sha256'))
+db.session.add(admin1)
 db.session.commit()
 
-print('Data seeded successfully!')
+
+    # Add notifications
+notification1 = Notification(message='Book The Great Gatsby is due for return on 2021-03-15', cust_id=1)
+notification2 = Notification(message='Book To Kill a Mockingbird is due for return on 2021-03-16', cust_id=2)
+notification3 = Notification(message='Book 1984 is due for return on 2021-03-17', cust_id=3)
+notification4 = Notification(message='Book The Catcher in the Rye is due for return on 2021-03-18', cust_id=4)
+notification5 = Notification(message='Book The Hobbit is due for return on 2021-03-19', cust_id=5)
+
+# Add all notifications at once
+db.session.add_all([notification1, notification2, notification3, notification4, notification5])
+
+# Commit the changes to save them to the database
+db.session.commit()
+
+# Function to update the notification status
+def update_notification_status(notification_id):
+    with app.app_context():
+        # Get the notification by ID
+        notification = Notification.query.get(notification_id)
+        
+        if notification:
+            # Update its status to 'read'
+            notification.status = 'read'
+            
+            # Commit the update to the database
+            db.session.commit()
+            
+            print(f'Notification {notification_id} status updated successfully.')
+        else:
+            print('Notification not found.')
+
+# Call the function to update the notification status
+update_notification_status(1)
+update_notification_status(2)
+update_notification_status(3)
+update_notification_status(4)
+update_notification_status(5)
+
+# Commit the final changes
+db.session.commit()
+
+print('Data seeded and notifications updated successfully!')
+
+    # Verify the data in the database
+notifications_in_db = Notification.query.all()
+print(f'Total notifications in DB: {len(notifications_in_db)}')
+
+
+
 
 # Entry point to run the application
 if __name__ == '__main__':
     app.run(debug=True)
-
+   

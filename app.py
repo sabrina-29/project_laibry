@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
+from flask_mail import Mail
 from flask_login import LoginManager, login_user, login_required, logout_user
 from datetime import datetime
 from models import db, Book, Customer, Loan, Admin, Notification
 from config import Config
-
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -19,6 +18,8 @@ mail = Mail(app)
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"message": "Welcome to the Library Management System!"})
+
+
 
 # Book CRUD Routes
 

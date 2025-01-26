@@ -3,6 +3,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'your_secret_key'
     
+    
+    
     # Email settings
     MAIL_SERVER = 'smtp.example.com'
     MAIL_PORT = 587

@@ -2,6 +2,8 @@ from datetime import datetime
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
+
+
 db = SQLAlchemy()
 
 # Book model
@@ -92,7 +94,7 @@ class Loan(db.Model):
 class Admin(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
    
     
@@ -106,3 +108,5 @@ class Notification(db.Model):
     priority = db.Column(db.String(10), nullable=False, default='medium')
     recipient_id = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+        
